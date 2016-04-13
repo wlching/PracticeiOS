@@ -1,0 +1,128 @@
+//: Playground - noun: a place where people can play
+// 2016/04/11 & 2016/04/12
+
+import UIKit
+import Foundation
+
+protocol Characteristics {
+    var foodType: FoodType { get }
+}
+
+enum FoodType{
+    case Carnivores
+    case Herbivores
+    case Omnivores
+}
+
+enum Gender{
+    case Male
+    case Female
+}
+
+class Animal : Characteristics{
+    let species : String!
+    var age : Int
+    let gender : Gender!
+    var foodType: FoodType
+    
+    func makeSounds(){
+        print("animal sounds")
+    }
+    
+    init(species:String, age: Int, gender : Gender, foodType: FoodType){
+        self.species = species
+        self.age = age
+        self.gender = gender
+        self.foodType = foodType
+    }
+}
+
+class Lion : Animal{
+    override func makeSounds() {
+        print("Roar!!!")
+    }
+    init(age: Int, gender: Gender) {
+        super.init(species: "Lion", age: age, gender: gender, foodType: FoodType.Carnivores)
+    }
+}
+
+class Elephant: Animal{
+    override func makeSounds() {
+        print("Trumpet!!")
+    }
+    init(age: Int, gender: Gender) {
+        super.init(species: "Elephant", age: age, gender: gender, foodType: FoodType.Herbivores)
+    }
+    
+}
+
+class Bees : Animal{
+    override func makeSounds() {
+        print("Buzz!!")
+    }
+    
+    override init(species: String, age: Int, gender: Gender, foodType: FoodType) {
+        super.init(species: species, age: age, gender: gender, foodType: foodType)
+    }
+    
+    init(age: Int, gender: Gender) {
+        super.init(species: "Bees", age: age, gender: gender, foodType: FoodType.Omnivores)
+    }
+    
+
+}
+
+
+var beess = Bees(species:"Lion", age: 10, gender: Gender.Female, foodType: FoodType.Carnivores)
+
+var lion = Lion(age: 8, gender: Gender.Male)
+var elephant = Elephant(age: 7, gender: Gender.Female)
+var bee = Bees(age: 1, gender: Gender.Male)
+
+class Zoo{
+    var animals = [Animal]()
+    
+    
+    var maleAnimals: [Animal]  {
+        get {
+            return animals.filter { $0.gender == Gender.Male}
+        }
+    }
+    
+    var femaleAnimals: [Animal] {
+        get{
+            return animals.filter { $0.gender == Gender.Female}
+        }
+    }
+    
+    func washAnimals(){
+        for animal in animals{
+            print("Washed \(animal.species)")
+        }
+    }
+    
+    var orderAgeAnimals: [Animal]{
+        get{
+            return animals.sort { $0.age < $1.age}
+        }
+    }
+
+
+}
+
+var zoo = Zoo()
+zoo.animals.append(lion)
+zoo.animals.append(elephant)
+zoo.animals.append(bee)
+
+zoo.washAnimals()
+
+
+
+zoo.animals[0].age
+zoo.animals[1].age
+zoo.animals[2].age
+
+zoo.orderAgeAnimals[0].age
+zoo.orderAgeAnimals[1].age
+zoo.orderAgeAnimals[2].age
