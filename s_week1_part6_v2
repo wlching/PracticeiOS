@@ -1,0 +1,103 @@
+//: Playground - noun: a place where people can play
+
+import Foundation
+
+enum Country{
+    
+    case Taiwan
+    case US
+    
+}
+enum Address: String {
+    
+    case Address = "Address"
+    case City = "City"
+    case Zip = "Zip"
+    case Street = "Street"
+    case Country = "Country"
+    var key: String { return rawValue }
+    
+}
+
+
+
+func fieldWeightOfAddress(address: Address, country : Country) -> Int {
+    
+    switch  country {
+        
+    case .Taiwan:
+        let fieldWeights: [Address] = [ Address.Address, Address.City, Address.Zip]
+        // give index value, if cannot give, give it index[0] -> eazy to debug
+        return fieldWeights.indexOf(address) ?? 0
+
+    
+    case .US:
+        let fieldWeights: [Address] = [ Address.Address, Address.Street, Address.City, Address.Zip ]
+        return fieldWeights.indexOf(address) ?? 0
+
+    }
+    
+}
+
+let address1: [String: Any] = [
+    Address.Address.key: "101",
+    Address.City.key: "Taipei",
+    Address.Zip.key: 106,
+//    Address.Street.key: "Dont Care St."
+]
+
+let address2: [String: Any] = [
+    Address.Address.key: "City Hall",
+    Address.City.key: "Taipei",
+    Address.Zip.key: 106,
+    Address.Street.key: "Keelung Rd.",
+]
+
+let address3: [String: Any] = [
+    Address.Address.key: "101",
+    Address.City.key: "Taipei",
+    Address.Zip.key: 106,
+    Address.Street.key: "Dont Care St."
+]
+
+let profile: [String: Any] = [
+    "Name": "Roy Hsu",
+    "Age": 26,
+    "Addresses": [ (Country.Taiwan, address1), (Country.US, address2), (Country.Taiwan, address3) ]
+]
+
+
+if let addresses = profile["Addresses"] as? Array<(Country, [String: Any])> {
+    
+    for address in addresses {
+        
+        //addresses: [ (Country, [String:Any]) ]
+        //address: (Country, [String:Any])
+        //address.0: Country
+        //address.1: [String:Any] =mapping=> keyVaulePairsArray: [(enum Address, Any)]
+        
+        var country = address.0
+        // Map dictionary to array of (Address, value) pair
+        let keyValuePairsArray = address.1.map { (Address(rawValue: $0.0)!, $0.1) }
+        
+        // Order the array depends on address field weight.
+        let sortedKeyValuePairsWithAddressFieldWeightArray = keyValuePairsArray.sort { fieldWeightOfAddress($0.0, country: country) < fieldWeightOfAddress($1.0, country: country) }
+        
+        let addressString = sortedKeyValuePairsWithAddressFieldWeightArray.reduce("") { result, element in
+            
+            let currentValue = element.1
+            
+            return result + "\(currentValue) "
+            
+        }
+        
+        // Remove the additional space at the end of string.
+        let finalAddressString = addressString.stringByTrimmingCharactersInSet(.whitespaceCharacterSet())
+        
+        print(finalAddressString)
+        
+    }
+    
+}
+
+
