@@ -1,0 +1,119 @@
+//
+//  main.swift
+//  week_1_part_4_v_1
+//
+//  Created by Sarah on 2016/4/12.
+//  Copyright © 2016年 Sarahlee. All rights reserved.
+//
+
+import Foundation
+
+enum Gender{
+    case Male
+    case Female
+}
+
+enum FoodType{
+    case  Carnivores, Herbivores, Omnivores
+}
+
+protocol Characteristics {
+    var foodType : FoodType {get}
+}
+
+class Animal : Characteristics{
+    let species: String
+    let gender: Gender
+    var age: Int
+    var foodType : FoodType
+    
+    init(species: String, age: Int, gender: Gender, foodType: FoodType){
+        self.species = species
+        self.age = age
+        self.gender = gender
+        self.foodType = foodType
+    }
+    
+    func makeSound() {}
+}
+
+
+
+
+class Dog:Animal{
+    init(age: Int = 0, gender: Gender){
+        super.init(species: "dog", age: age, gender: gender, foodType: .Omnivores)
+    }
+    override func makeSound() {
+        print("woof")
+    }
+}
+class Cat:Animal{
+    init(age: Int = 0, gender: Gender){
+        super.init(species: "cat", age: age, gender: gender, foodType: .Omnivores)
+    }
+    override func makeSound() {
+        print("meow")
+    }
+}
+class Lion:Animal{
+    init(age: Int = 0, gender: Gender){
+        super.init(species: "lion", age: age, gender: gender, foodType: .Carnivores)
+    }
+    override func makeSound() {
+        print("raor")
+    }
+    
+}
+
+
+class Zoo{
+    var animals = [Animal]()
+    
+    var maleAnimals: [Animal] {
+            return animals.filter( { $0.gender == Gender.Male } )
+    }
+    
+    var femaleAnimals : [Animal] {
+            return animals.filter( {$0.gender == Gender.Female} )
+    }
+    func addAnimals(animal:Animal){
+        animals.append(animal)
+    }
+    
+    func washAnimals(){
+        for wanimal in animals{
+            print("washed \(wanimal.species), age : \(wanimal.age), gender : \(wanimal.gender), food type : \(wanimal.foodType)")
+        }
+    }
+    
+    func sortAnimalsAge(){
+        let sortedAnimals = animals.sort( {$0.age > $1.age} )
+        print("Descending oder of animals' age : \(sortedAnimals)")
+    }
+    
+}
+
+
+let zoo = Zoo()
+let youngDog = Dog(age:1, gender: .Female)
+let oldCat = Cat(age:13, gender: .Male)
+let lion = Lion(age:8, gender: .Male)
+
+zoo.addAnimals(youngDog)
+zoo.addAnimals(oldCat)
+zoo.addAnimals(lion)
+
+zoo.washAnimals()
+zoo.sortAnimalsAge()
+
+print(zoo.femaleAnimals)
+print(zoo.maleAnimals)
+
+//for version 2 :
+//age better declare outside the init : age will change by years
+//food type can be computed property (use return)
+
+
+
+
